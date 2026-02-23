@@ -44,45 +44,67 @@
 
 ```
 1. 웹 앱 접속 → "시뮬레이션 시작" 클릭
-2. 난이도/유형 선택
-   - 초급: 검찰 사칭 (쉽게 구분 가능)
-   - 중급: 은행 상담원 사칭 (교묘함)
-   - 고급: 랜덤 (보이스피싱 or 진짜 상담원, 모름)
+2. 시나리오 선택 (4종 — 음질 × 대화내용 매트릭스)
+   - 검찰 사칭 (보이스피싱) — 강압적, 저품질
+   - 은행 사칭 (보이스피싱) — 친절하지만 급한, 고품질 (교묘!)
+   - 진짜 은행 콜센터 (정상) — ARS 거친 저품질 (함정!)
+   - 진짜 은행 상담원 (정상) — 차분, 고품질
+   * 또는 랜덤 선택 (고급 모드)
 3. 화면에 전화 수신 UI 표시 (신한 스타일)
    - "02-3145-XXXX에서 전화가 왔습니다"
    - 수락/거절 버튼
-4. 수락 → 실시간 음성 대화 시작
+4. 수락 → 실시간 스트리밍 음성 대화 시작
    AI: "안녕하세요, 서울중앙지검 수사관 김정수입니다."
    AI: "본인 명의 계좌가 범죄에 연루되어 연락드렸습니다."
    사용자: (마이크로 응답)
-   AI: (Claude API가 시나리오에 맞게 대화 이어감)
+   AI: (Claude API가 시나리오에 맞게 대화 이어감, 스트리밍)
 5. 대화 중 언제든 "끊기" 또는 "신고" 버튼 가능
 6. 대화 종료 → 판정 화면
    - "이 전화는 보이스피싱이었을까요?" [예/아니오]
    - 정답 공개 + 점수
-7. AI 해설
+7. AI 해설 (대화 내용/패턴 중심)
    - "이 전화에서 의심할 포인트는 3가지였습니다:"
    - "1. 검찰은 전화로 수사 사실을 통보하지 않습니다"
-   - "2. '안전계좌'는 존재하지 않는 개념입니다"
-   - "3. 통화 음질이 VoIP 특성을 보였습니다 (해외 경유)"
+   - "2. 전화로 주민번호/계좌번호를 요구하면 100% 사기"
+   - "3. '안전계좌'는 존재하지 않는 개념입니다"
+   - ※ 음질은 참고 요소로만 언급 (음질만으로 판단하면 안 됨!)
 8. 기술 분석 교육 화면
    - 이 통화의 주파수 스펙트로그램 시각화
-   - VoIP vs 실제 금융권 HD Voice 음질 비교 그래프
+   - 보이스피싱 vs 정상 통화 음질 비교 (참고용)
 ```
+
+#### 핵심 교육 포인트: 음질이 아니라 대화 내용이 판별 기준
+
+```
+              │ 개인정보 요구 O      │ 개인정보 요구 X
+──────────────┼─────────────────────┼──────────────────────
+저품질 음성   │ 보이스피싱 (쉬움)    │ 정상 은행 (함정!)
+고품질 음성   │ 보이스피싱 (교묘!)   │ 정상 은행
+```
+
+- 저품질이라고 다 보이스피싱이 아님 (은행 ARS도 저품질)
+- 고품질이라고 안전한 게 아님 (고급 보이스피싱)
+- **"무엇을 요구하는지"가 핵심 판별 기준**
 
 ### 시나리오 2: 교육 학습 모드
 
 ```
-1. 보이스피싱 유형별 사례 학습
-   - 검찰/경찰 사칭형
-   - 금융기관 사칭형
-   - 가족/지인 사칭형
+1. 보이스피싱 판별 체크리스트 학습
+   - 전화로 개인정보(주민번호, 카드번호, OTP) 요구 → 사기
+   - "안전계좌"로 이체 유도 → 사기
+   - "지금 당장", "체포" 등 심리적 압박 → 사기
+   - "누구에게도 말하지 마세요" → 사기
+   - 확인할 시간을 주지 않음 → 사기
+2. 유형별 사례 학습
+   - 검찰/경찰 사칭형 (저품질 + 개인정보 요구)
+   - 금융기관 사칭형 (고품질 + 개인정보 요구 — 교묘!)
+   - 정상 은행 (저품질이지만 개인정보 요구 안 함 — 함정!)
    - 대출 사기형
-2. 각 유형별 특징 설명 + 예시 음성 재생
-3. AI가 "이 부분이 의심 포인트입니다" 음성 해설
-4. 음질 차이 체험
-   - 같은 대사를 VoIP 저품질 vs HD Voice로 재생
-   - "이 차이가 느껴지시나요?" 교육
+3. 각 유형별 특징 설명 + 예시 음성 재생
+4. AI가 "이 부분이 의심 포인트입니다" 음성 해설
+5. 음질 차이 체험 (참고용)
+   - 같은 대사를 저품질 vs 고품질로 재생
+   - "음질만으로 판단하면 안 됩니다" 교육
 ```
 
 ### 시나리오 3: 퀴즈 모드
@@ -158,11 +180,11 @@
 │  ┌──────────────────────────────────────────────────────────┐    │
 │  │                    TTS Engine                             │    │
 │  │                                                           │    │
-│  │  edge-tts (Microsoft Azure TTS, 무료)                     │    │
-│  │  - ko-KR-SunHiNeural (여성 음성)                          │    │
-│  │  - ko-KR-InJoonNeural (남성 음성)                         │    │
-│  │  - 속도/피치 조절                                         │    │
-│  │  - 텍스트 → MP3 바이너리 반환                             │    │
+│  │  ElevenLabs (음성 복제 + 스트리밍 TTS)                    │    │
+│  │  - Instant Voice Clone (사용자 음성 복제)                 │    │
+│  │  - eleven_multilingual_v2 모델 (한국어 지원)              │    │
+│  │  - 시나리오별 stability/style/speed 조절                  │    │
+│  │  - 스트리밍 TTS → MP3 청크 바이너리 반환                  │    │
 │  └──────────────────────────────────────────────────────────┘    │
 │                                                                   │
 │  ┌──────────────────────────────────────────────────────────┐    │
@@ -184,10 +206,10 @@
 ```
 Spring Boot (메인)           Python FastAPI (오디오)
 ─────────────────            ──────────────────────
-비즈니스 로직                 TTS 음성 합성 (edge-tts)
+비즈니스 로직                 TTS 음성 합성 (ElevenLabs 음성복제)
 WebSocket 세션 관리           오디오 효과 처리 (scipy, pydub)
-Claude API 호출               스펙트로그램 생성 (librosa)
-DB (JPA/MySQL)
+Claude API 호출 (스트리밍)    VoIP 음질 시뮬레이션
+DB (JPA/MySQL)               스펙트로그램 생성 (librosa)
 인증/세션
 점수/랭킹
 
@@ -198,7 +220,7 @@ DB (JPA/MySQL)
 
 ---
 
-## 실시간 음성 대화 파이프라인 (핵심)
+## 실시간 스트리밍 음성 대화 파이프라인 (핵심)
 
 ```
 사용자 발화                                              AI 응답
@@ -207,52 +229,54 @@ DB (JPA/MySQL)
 [브라우저 마이크]                                  [브라우저 스피커]
     │                                                       ▲
     ▼                                                       │
-[Web Speech API]                                  [Audio Element]
-  (STT, 브라우저 내장)                              (MP3 재생)
+[Web Speech API]                                  [Audio 스트리밍 재생]
+  (STT, 브라우저 내장)                              (청크 단위 즉시 재생)
     │                                                       ▲
     ▼                                                       │
 [WebSocket STOMP 전송]                            [WebSocket 수신]
-  {type: "speech",                                 {type: "audio",
-   text: "네? 무슨 소리예요?"}                      data: base64_mp3}
+  {type: "speech",                                 {type: "ai_audio",
+   text: "네? 무슨 소리예요?"}                      audio: base64_chunk}
     │                                                       ▲
     ▼                                                       │
 ┌─── Spring Boot ──────────────────────────────────────────┐│
 │                                                           ││
 │  1. 사용자 텍스트 수신                                    ││
 │  2. 대화 이력에 추가                                      ││
-│  3. Claude API 호출 (시나리오 프롬프트 + 대화 이력)       ││
-│       → 응답: "본인 확인을 위해 주민번호를 불러주십시오"  ││
-│  4. Python TTS 서비스 호출                                ││
-│       POST /api/tts {text: "...", voice: "male",          ││
-│                       voip_effect: true}                  ││
-│       → 응답: MP3 바이너리                                ││
-│  5. MP3를 base64 인코딩 → WebSocket으로 클라이언트에 전송 ││
+│  3. Claude API 스트리밍 호출                              ││
+│     → 토큰 단위로 흘러옴                                  ││
+│  4. 문장 단위로 끊어서 (마침표/물음표 기준)               ││
+│     → Python TTS 스트리밍 요청                            ││
+│       POST /api/tts/stream {text: "첫 문장",              ││
+│         scenario_type: "prosecution", voip_effect: true}  ││
+│  5. 오디오 청크를 WebSocket으로 즉시 전송                 ││
+│  6. 다음 문장도 동시에 처리 (파이프라이닝)                ││
 │                                                           ││
 └───────────────────────────────────────────────────────────┘│
                                                              │
 ┌─── Python FastAPI ────────────────────────────────────────┐│
 │                                                           ││
-│  POST /api/tts                                            ││
-│  1. edge-tts로 텍스트 → MP3 변환                         ││
+│  POST /api/tts/stream                                     ││
+│  1. ElevenLabs 스트리밍 TTS (음성 복제)                   ││
+│     - 시나리오별 voice settings 적용                      ││
 │  2. voip_effect=true면 VoIP 음질 효과 적용               ││
 │     - 로우패스 필터 (3.4kHz)                              ││
 │     - 패킷 손실 시뮬레이션                                ││
 │     - 노이즈/에코 추가                                    ││
-│  3. MP3 바이너리 반환 ────────────────────────────────────┘│
+│  3. MP3 스트리밍 반환 ────────────────────────────────────┘│
 │                                                            │
 └────────────────────────────────────────────────────────────┘
 ```
 
-### 지연시간 예상
+### 지연시간 비교
 
 ```
-1. Web Speech API (STT)        :  ~0.5초 (브라우저 내장)
-2. WebSocket 전송               :  ~0.05초
-3. Claude API 응답              :  ~1~2초 (스트리밍 시 ~0.5초)
-4. Python TTS + 음질 효과       :  ~0.5~1초
-5. WebSocket 전송 + 재생        :  ~0.1초
-────────────────────────────────────────────
-총: 약 2~3초 (자연스러운 전화 대화 수준)
+기본 방식 (전체 대기):          스트리밍 방식 (채택):
+STT        0.5초                STT        0.5초
+Claude     2.0초 (전체 대기)    Claude     1.0초 (첫 문장만)
+TTS        1.5초 (전체 대기)    TTS        0.5초 (첫 문장만)
+전송+재생  0.1초                전송+재생  0.1초
+─────────────────              ─────────────────
+총: ~4초                        총: ~2초 (체감 1.5초)
 ```
 
 ---
@@ -334,10 +358,12 @@ Java 17+ / Spring Boot 3.x
 Python 3.11+ / FastAPI
 │
 ├── TTS 엔진
-│   └── edge-tts — Microsoft Azure 한국어 TTS (무료)
-│       ├── ko-KR-SunHiNeural (여성)
-│       ├── ko-KR-InJoonNeural (남성)
-│       └── ko-KR-HyunsuNeural (남성2)
+│   ├── ElevenLabs — 음성 복제 + 스트리밍 TTS (시연용, $5/월)
+│   │   ├── Instant Voice Clone (사용자 음성 복제)
+│   │   ├── eleven_multilingual_v2 모델 (한국어)
+│   │   ├── 시나리오별 voice settings 조절
+│   │   └── 스트리밍 TTS 지원
+│   └── edge-tts — Microsoft Azure 한국어 TTS (개발용, 무료)
 │
 ├── 오디오 처리
 │   ├── pydub — 오디오 포맷 변환
@@ -346,14 +372,15 @@ Python 3.11+ / FastAPI
 │   └── librosa — 스펙트로그램 생성
 │
 ├── API 엔드포인트
-│   ├── POST /api/tts — 텍스트→음성 변환 (+VoIP 효과)
+│   ├── POST /api/tts/stream — 텍스트→음성 스트리밍 변환
+│   ├── POST /api/tts — 텍스트→음성 전체 변환 (해설용)
 │   ├── POST /api/audio/effects — 오디오에 VoIP 효과 적용
 │   ├── POST /api/audio/spectrogram — 스펙트로그램 이미지 생성
 │   └── GET  /api/health — 헬스체크
 │
 └── 패키지
     ├── fastapi, uvicorn
-    ├── edge-tts
+    ├── elevenlabs (TTS)
     ├── pydub, scipy, numpy, librosa
     └── matplotlib (스펙트로그램 이미지)
 ```
@@ -433,16 +460,28 @@ public class SimulationWebSocketController {
 }
 ```
 
-### Python TTS 서비스 호출
+### Python TTS 스트리밍 서비스 호출
 
 ```java
-// Spring Boot → Python FastAPI HTTP 호출
+// Spring Boot → Python FastAPI 스트리밍 HTTP 호출
 
 @Service
 public class AudioService {
 
+    // 스트리밍 TTS (실시간 대화용)
+    public Flux<byte[]> streamTTS(String text, String scenarioType, boolean voipEffect) {
+        TtsRequest request = new TtsRequest(text, scenarioType, voipEffect);
+
+        return webClient.post()
+            .uri("http://localhost:8090/api/tts/stream")
+            .bodyValue(request)
+            .retrieve()
+            .bodyToFlux(byte[].class);
+    }
+
+    // 전체 TTS (해설용)
     public byte[] textToSpeech(String text, boolean voipEffect) {
-        TtsRequest request = new TtsRequest(text, "male", voipEffect);
+        TtsRequest request = new TtsRequest(text, "normal", voipEffect);
 
         return webClient.post()
             .uri("http://localhost:8090/api/tts")
@@ -458,20 +497,35 @@ public class AudioService {
 
 ## Python 오디오 서비스 API 상세
 
-### POST /api/tts
+### POST /api/tts/stream (스트리밍 TTS — 실시간 대화용)
 
 ```
 Request:
 {
     "text": "본인 확인을 위해 주민번호를 불러주십시오",
-    "voice": "male",         // male | female
-    "voip_effect": true,     // VoIP 저품질 효과 적용
-    "speed": 1.2             // 말 속도 (보이스피싱은 빠르게)
+    "voice_id": "REDACTED",
+    "scenario_type": "prosecution",  // prosecution | bank_fake | bank_real_low | bank_real_high
+    "voip_effect": true
+}
+
+Response:
+Content-Type: audio/mpeg (스트리밍)
+Body: MP3 청크 바이너리 (StreamingResponse)
+```
+
+### POST /api/tts (전체 TTS — 해설용)
+
+```
+Request:
+{
+    "text": "이 전화에서 의심할 포인트는...",
+    "voice_id": "REDACTED",
+    "voip_effect": false
 }
 
 Response:
 Content-Type: audio/mpeg
-Body: MP3 바이너리
+Body: 전체 MP3 바이너리
 ```
 
 ### POST /api/audio/effects
@@ -501,10 +555,12 @@ Body: 스펙트로그램 이미지
 
 ---
 
-## VoIP 음질 시뮬레이션 (교육의 핵심)
+## VoIP 음질 시뮬레이션 (교육 참고 요소)
 
-보이스피싱 시나리오에서는 TTS 음성에 **의도적으로 VoIP 저품질 효과**를 적용하여
-사용자에게 "이런 음질이면 의심하세요"라고 교육한다.
+시나리오별로 음질을 차등 적용하되, **음질만으로 판단하면 안 된다**는 것이 핵심 교육 포인트.
+- 보이스피싱도 저품질일 수 있고 (VoIP 경유), 고품질일 수도 있음
+- 정상 은행 통화도 저품질일 수 있음 (ARS 시스템 경유)
+- **대화 내용(개인정보 요구 여부)이 진짜 판별 기준**
 
 ### 효과 비교
 
@@ -596,11 +652,12 @@ async def apply_voip_effect(audio_bytes: bytes) -> bytes:
 - 대화는 최대 2분(약 10턴) 이내로 진행하세요
 ```
 
-### 시나리오 1: 검찰 사칭형
+### 시나리오 1: 검찰 사칭 (보이스피싱 — 저품질)
 
 ```
 역할: 서울중앙지검 수사관 김정수
 목표: 사용자의 개인정보(주민번호)와 계좌이체를 유도
+특징: 강압적, 혼내듯이, 시간 압박
 
 대화 흐름:
 1단계 - 신분: "서울중앙지검 수사관 김정수입니다"
@@ -609,14 +666,17 @@ async def apply_voip_effect(audio_bytes: bytes) -> bytes:
 4단계 - 이체유도: "안전계좌로 자금을 이동하셔야 합니다"
 5단계 - 압박: "지금 즉시 하지 않으면 체포 영장이 발부됩니다"
 
-음질: VoIP 저품질 적용 (voip_effect: true)
+음질: VoIP 저품질 (voip_effect: true)
+음성: stability=0.6, style=0.3, speed=0.9
+난이도: 쉬움 (저품질 + 개인정보 요구 → 전형적 보이스피싱)
 ```
 
-### 시나리오 2: 은행 상담원 사칭형
+### 시나리오 2: 은행 사칭 (보이스피싱 — 고품질, 교묘!)
 
 ```
 역할: 신한은행 고객센터 상담원 이수현
 목표: 카드 정보/OTP 번호 탈취
+특징: 친절하지만 급한, 전문 용어 사용
 
 대화 흐름:
 1단계: "신한카드 고객센터입니다. 카드 이상 거래가 감지되었습니다"
@@ -624,14 +684,17 @@ async def apply_voip_effect(audio_bytes: bytes) -> bytes:
 3단계: "보안을 위해 OTP 번호를 불러주세요"
 4단계: "앱에서 본인 인증을 해주셔야 차단됩니다"
 
-음질: VoIP 중간 품질 (교묘함)
+음질: 고품질 (voip_effect: false) — 음질이 좋아서 속기 쉬움!
+음성: stability=0.5, style=0.5, speed=1.0
+난이도: 어려움 (고품질 + 개인정보 요구 → 교묘한 보이스피싱)
 ```
 
-### 시나리오 3: 정상 은행 상담원 (함정)
+### 시나리오 3: 진짜 은행 콜센터 (정상 — 저품질, 함정!)
 
 ```
-역할: 진짜 신한은행 상담원 박지영
+역할: 진짜 신한은행 콜센터 상담원 박지영
 목표: 정상적인 카드 만료 안내 (보이스피싱 아님!)
+특징: 차분, 사무적, ARS 시스템 거쳐서 연결됨
 
 대화 흐름:
 1단계: "신한카드입니다. 카드 유효기간 만료 안내드립니다"
@@ -639,21 +702,27 @@ async def apply_voip_effect(audio_bytes: bytes) -> bytes:
 3단계: "주소 변경이 있으시면 앱에서 직접 변경해주세요"
 (개인정보 요구 없음, 이체 유도 없음)
 
-음질: HD Voice 고품질 (voip_effect: false)
+음질: 저품질 (voip_effect: true) — ARS/라우팅으로 인한 저품질
+음성: stability=0.7, style=0.2, speed=0.95
+난이도: 어려움 (저품질이라 보이스피싱으로 오해하기 쉬움!)
 ```
 
-### 시나리오 4: 대출 사기형
+### 시나리오 4: 진짜 은행 상담원 (정상 — 고품질)
 
 ```
-역할: 저금리 대출 상담사
-목표: 선입금 사기
+역할: 진짜 신한은행 상담원 김은지
+목표: 정상적인 적금 만기 안내 (보이스피싱 아님!)
+특징: 차분, 친절, 개인정보 요구 없음
 
 대화 흐름:
-1단계: "정부지원 저금리 대출 안내드립니다"
-2단계: "신용등급 조회를 위해 소액 인증이 필요합니다"
-3단계: "50만원을 입금하시면 대출이 실행됩니다"
+1단계: "신한은행입니다. 적금 만기 안내드립니다"
+2단계: "만기일은 다음 달 15일이며, 자동 재예치됩니다"
+3단계: "변경 사항이 있으시면 앱이나 지점 방문으로 처리 가능합니다"
+(개인정보 요구 없음, 이체 유도 없음)
 
-음질: VoIP 저품질
+음질: 고품질 (voip_effect: false) — 깨끗한 HD Voice
+음성: stability=0.7, style=0.2, speed=0.95
+난이도: 쉬움 (고품질 + 개인정보 요구 안 함 → 정상)
 ```
 
 ### 해설 생성 프롬프트
@@ -667,13 +736,19 @@ async def apply_voip_effect(audio_bytes: bytes) -> bytes:
 [시나리오 정보]
 유형: {scenario_type}
 정답: {is_phishing}
+음질: {audio_quality} (저품질/고품질)
 사용자 판정: {user_answer}
 
 해설할 내용:
-1. 이 전화가 보이스피싱인/아닌 이유 (구체적 근거 3가지)
+1. 이 전화가 보이스피싱인/아닌 이유 — 대화 내용/패턴 중심으로 (구체적 근거 3가지)
+   - 개인정보(주민번호, 카드번호, OTP) 요구 여부
+   - 심리적 압박(시간, 공포) 사용 여부
+   - 이체/송금 유도 여부
 2. 사용자가 대화에서 잘한 점 / 위험했던 점
 3. 실제로 이런 전화를 받으면 어떻게 해야 하는지
-4. 음질 특성으로 구분하는 법
+4. 음질 관련 참고 사항 (음질만으로 판단하면 안 되는 이유 설명)
+   - 정상 은행 ARS도 저품질일 수 있음
+   - 고급 보이스피싱은 고품질일 수 있음
 ```
 
 ---
@@ -709,9 +784,10 @@ Member (회원)
 
 Scenario (시나리오)
 ├── id (PK)
-├── type (PROSECUTION, BANK_FAKE, BANK_REAL, LOAN)
+├── type (PROSECUTION_PHISHING, BANK_PHISHING, BANK_REAL_LOW, BANK_REAL_HIGH)
 ├── difficulty (EASY, MEDIUM, HARD)
 ├── is_phishing (boolean)
+├── voip_effect (boolean)
 ├── system_prompt (TEXT)
 ├── caller_name
 ├── caller_number
@@ -850,23 +926,23 @@ voiceai/
 │       │   │   └── TtsRequest.java
 │       │   │
 │       │   └── common/
-│       │       ├── ScenarioType.java              ← enum
+│       │       ├── ScenarioType.java              ← enum (PROSECUTION_PHISHING, BANK_PHISHING, BANK_REAL_LOW, BANK_REAL_HIGH)
 │       │       └── Difficulty.java                ← enum
 │       │
 │       └── resources/
 │           ├── application.yml
 │           ├── data.sql                           ← 시나리오 초기 데이터
 │           └── prompts/
-│               ├── prosecution.txt                ← 검찰 사칭 프롬프트
-│               ├── bank_fake.txt                  ← 은행 사칭 프롬프트
-│               ├── bank_real.txt                  ← 정상 상담원 프롬프트
-│               ├── loan_scam.txt                  ← 대출 사기 프롬프트
+│               ├── prosecution_phishing.txt       ← 검찰 사칭 (보이스피싱, 저품질)
+│               ├── bank_phishing.txt              ← 은행 사칭 (보이스피싱, 고품질)
+│               ├── bank_real_low.txt              ← 정상 은행 콜센터 (저품질)
+│               ├── bank_real_high.txt             ← 정상 은행 상담원 (고품질)
 │               └── feedback.txt                   ← 해설 생성 프롬프트
 │
 ├── audio-service/                         ← Python FastAPI (오디오)
 │   ├── requirements.txt
 │   ├── main.py                            ← FastAPI 진입점
-│   ├── tts_engine.py                      ← edge-tts TTS
+│   ├── tts_engine.py                      ← ElevenLabs TTS (음성 복제 + 스트리밍)
 │   ├── audio_effects.py                   ← VoIP 음질 시뮬레이터
 │   ├── spectrogram.py                     ← 스펙트로그램 생성
 │   └── Dockerfile
@@ -948,10 +1024,12 @@ docker-compose up -d
 
 | 리소스 | 용도 | 비용 |
 |--------|------|------|
-| Claude API 키 | AI 대화/해설 | 유료 (약 $0.10/시뮬레이션) |
-| edge-tts | 한국어 TTS | 무료 |
+| Claude API 키 | AI 대화/해설 (스트리밍) | 유료 (약 $0.10/시뮬레이션) |
+| ElevenLabs | 음성 복제 + 스트리밍 TTS (시연용) | $5/월 (Starter) |
+| edge-tts | 한국어 TTS (개발/테스트용) | 무료 |
 | Web Speech API | 브라우저 STT | 무료 (Chrome 내장) |
 | MySQL | 데이터 저장 | 무료 (로컬) |
 | Java 17+ | Spring Boot | 무료 |
 | Node.js 18+ | React 빌드 | 무료 |
 | Python 3.11+ | 오디오 서비스 | 무료 |
+| ffmpeg | pydub 오디오 처리 | 무료 |
