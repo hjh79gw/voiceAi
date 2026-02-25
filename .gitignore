@@ -1,0 +1,18 @@
+# 환경변수 (API 키)
+.env
+*.env
+**/application.yaml
+**/application.yml
+
+# IDE
+.idea/
+*.iml
+
+# Build
+build/
+target/
+node_modules/
+dist/
+
+# OS
+.DS_Store
