@@ -54,7 +54,7 @@ async def health():
 @app.post("/api/tts/stream")
 async def tts_stream_endpoint(request: TtsRequest):
     """스트리밍 TTS - 실시간 대화용"""
-    voice_id = request.voice_id or os.getenv("ELEVENLABS_VOICE_ID", "REDACTED")
+    voice_id = request.voice_id or os.getenv("ELEVENLABS_VOICE_ID")
     settings = SCENARIO_VOICE_SETTINGS.get(request.scenario_type, VoiceSettings())
 
     async def generate():
@@ -72,7 +72,7 @@ async def tts_stream_endpoint(request: TtsRequest):
 @app.post("/api/tts")
 async def tts_full_endpoint(request: TtsRequest):
     """전체 TTS - 해설용"""
-    voice_id = request.voice_id or os.getenv("ELEVENLABS_VOICE_ID", "REDACTED")
+    voice_id = request.voice_id or os.getenv("ELEVENLABS_VOICE_ID")
     settings = SCENARIO_VOICE_SETTINGS.get(request.scenario_type, VoiceSettings())
 
     audio_bytes = await tts_full(
