@@ -1,4 +1,4 @@
-# VoiceAI MVP - 2일 완성 계획
+# VoiceAI MVP 모델
 
 ## MVP 핵심 기능 (이것만 만든다)
 
